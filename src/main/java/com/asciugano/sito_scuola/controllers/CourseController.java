@@ -37,9 +37,6 @@ public class CourseController {
 //    @PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
     @PostMapping
     public ResponseEntity<Course> createCourse(@RequestHeader("Authorization") String authHeader, @RequestBody Course course) {
-
-        // TODO
-        // aggiungere controllo( se prof o admin )
         return ResponseEntity.ok(coursesRepository.save(course));
     }
 
