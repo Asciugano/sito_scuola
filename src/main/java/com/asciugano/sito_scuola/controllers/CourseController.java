@@ -2,6 +2,8 @@ package com.asciugano.sito_scuola.controllers;
 
 import com.asciugano.sito_scuola.models.Course;
 import com.asciugano.sito_scuola.repository.CoursesRepository;
+import com.asciugano.sito_scuola.services.JwtService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,13 +14,17 @@ import java.util.List;
 public class CourseController {
 
     private final CoursesRepository coursesRepository;
+    private final JwtService jwtService;
 
-    public CourseController(CoursesRepository coursesRepository) {
+    public CourseController(CoursesRepository coursesRepository, JwtService jwtService) {
         this.coursesRepository = coursesRepository;
+        this.jwtService = jwtService;
     }
 
     @GetMapping
     public ResponseEntity<List<Course>> getAllCourses() {
+        // TODO
+        // impostare il limite alla response
         return ResponseEntity.ok(coursesRepository.findAll());
     }
 
@@ -30,7 +36,10 @@ public class CourseController {
     }
 
     @PostMapping
-    public ResponseEntity<Course> createCourse(@RequestBody Course course) {
+    public ResponseEntity<Course> createCourse(@RequestHeader("Authorization") String authHeader, @RequestBody Course course) {
+
+        // TODO
+        // aggiungere controllo( se prof o admin )
         return ResponseEntity.ok(coursesRepository.save(course));
     }
 
