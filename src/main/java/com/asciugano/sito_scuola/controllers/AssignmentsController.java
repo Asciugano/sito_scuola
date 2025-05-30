@@ -50,4 +50,35 @@ public class AssignmentsController {
 
         return ResponseEntity.created(location).body(savedAssignment);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Assignment> getAssignmentById(@PathVariable long id) {
+        Assignment assignment = assignmentRepository.findById(id).orElseThrow(() -> new RuntimeException("Assignment not found"));
+
+        return ResponseEntity.ok(assignment);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Assignment> updateAssignment(@PathVariable long id, @RequestBody Assignment updatedAssignment) {
+        Assignment assignment = assignmentRepository.findById(id).orElseThrow(() -> new RuntimeException("Assignment not found"));
+
+        assignment.setTitle(updatedAssignment.getTitle());
+        assignment.setDescription(updatedAssignment.getDescription());
+        assignment.setCreatedAt(updatedAssignment.getCreatedAt());
+        assignment.setCourse(updatedAssignment.getCourse());
+        assignment.setSubmissions(updatedAssignment.getSubmissions());
+        assignment.setDueDate(updatedAssignment.getDueDate());
+
+        assignmentRepository.save(assignment);
+
+        return ResponseEntity.ok(assignment);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Assignment> deleteAssignment(@PathVariable long id) {
+        Assignment assignment = assignmentRepository.findById(id).orElseThrow(() -> new RuntimeException("Assignment not found"));
+        assignmentRepository.delete(assignment);
+
+        return ResponseEntity.ok(assignment);
+    }
 }
