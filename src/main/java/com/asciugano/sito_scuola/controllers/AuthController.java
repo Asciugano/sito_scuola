@@ -34,7 +34,7 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())
         );
 
-        return  jwtService.generateToken(user.getEmail());
+        return  jwtService.generateToken(user.getEmail(), user.getRole());
     }
 
     @PostMapping("/singup")
@@ -48,7 +48,7 @@ public class AuthController {
 
         userRepository.save(user);
 
-        return jwtService.generateToken(user.getEmail());
+        return jwtService.generateToken(user.getEmail(), user.getRole());
     }
 
     @GetMapping("/check-auth")

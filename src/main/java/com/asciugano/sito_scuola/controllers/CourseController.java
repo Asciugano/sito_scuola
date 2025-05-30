@@ -1,10 +1,11 @@
 package com.asciugano.sito_scuola.controllers;
 
 import com.asciugano.sito_scuola.models.Course;
+import com.asciugano.sito_scuola.models.Role;
 import com.asciugano.sito_scuola.repository.CoursesRepository;
 import com.asciugano.sito_scuola.services.JwtService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,8 +24,6 @@ public class CourseController {
 
     @GetMapping
     public ResponseEntity<List<Course>> getAllCourses() {
-        // TODO
-        // impostare il limite alla response
         return ResponseEntity.ok(coursesRepository.findAll());
     }
 
@@ -35,6 +34,7 @@ public class CourseController {
         return ResponseEntity.ok(course);
     }
 
+//    @PreAuthorize("hasRole('ADMIN') or hasRole('TEACHER')")
     @PostMapping
     public ResponseEntity<Course> createCourse(@RequestHeader("Authorization") String authHeader, @RequestBody Course course) {
 

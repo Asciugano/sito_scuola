@@ -1,5 +1,6 @@
 package com.asciugano.sito_scuola.services;
 
+import com.asciugano.sito_scuola.models.Role;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -19,14 +20,24 @@ public class JwtService {
         return Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generateToken(String username) {
+    public String generateToken(String username, Role role) {
         return Jwts.builder()
                 .subject(username)
                 .issuer("classroom-app")
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .claim("role", "ROLE_" + role.getLabel())
                 .signWith(getSigningKey())
                 .compact();
+    }
+
+    public Role extractRole(String token) {
+        return Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .get("role", Role.class);
     }
 
     public String extractUsername(String token) {
