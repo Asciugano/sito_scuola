@@ -4,14 +4,13 @@ import com.asciugano.sito_scuola.config.SecurityConfig;
 import com.asciugano.sito_scuola.models.User;
 import com.asciugano.sito_scuola.repository.UserRepository;
 import com.asciugano.sito_scuola.services.JwtService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -50,6 +49,30 @@ public class AuthController {
         userRepository.save(user);
 
         return jwtService.generateToken(user.getEmail());
+    }
+
+    @GetMapping("/check-auth")
+    public ResponseEntity<String> checkAuth(@RequestHeader("Authorization") String authHeader) {
+        if(authHeader == null || authHeader.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing or invalid JWT token");
+        }
+
+        String token = authHeader.substring(7);
+        String email;
+
+        try {
+            email = jwtService.extractUsername(token);
+        }
+        catch(Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid JWT token");
+        }
+
+        if(jwtService.isValidToken(token, email)) {
+            return ResponseEntity.ok("Token is valid");
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired JWT token");
+        }
     }
 }
 
