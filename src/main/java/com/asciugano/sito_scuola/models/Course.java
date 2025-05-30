@@ -1,5 +1,7 @@
 package com.asciugano.sito_scuola.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -15,8 +17,12 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private String name;
+
     @ManyToOne
     @JoinColumn(name = "teacher_id")
+    @JsonIgnoreProperties({"teachingCourses", "enrollesCourses", "password"})
     private User teacher;
 
     @ManyToMany
@@ -25,6 +31,7 @@ public class Course {
             joinColumns = @JoinColumn(name = "course_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
+    @JsonIgnoreProperties({"teachingCourses", "enrollesCourses", "password", "role"})
     private Set<User> students = new HashSet<>();
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
@@ -45,4 +52,8 @@ public class Course {
     public List<Assignment> getAssignments() { return assignments; }
 
     public void setAssignments(List<Assignment> assignments) { this.assignments = assignments; }
+
+    public String getName() { return name; }
+
+    public void setName(String name) { this.name = name; }
 }
