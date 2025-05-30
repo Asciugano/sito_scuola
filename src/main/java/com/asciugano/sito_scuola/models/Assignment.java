@@ -26,7 +26,7 @@ public class Assignment {
     @JoinColumn(name = "course_id")
     private Course course;
 
-    @OneToMany(mappedBy = "assignmet", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL)
     private List<Submission> submissions = new ArrayList<Submission>();
 
     public Long getId() { return id; }
