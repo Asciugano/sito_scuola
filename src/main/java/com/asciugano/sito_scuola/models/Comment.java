@@ -17,9 +17,11 @@ public class Comment {
     private LocalDateTime createdAt;
 
     @ManyToOne
+    @JoinColumn(name = "author_id")
     private User author;
 
     @ManyToOne
+    @JoinColumn(name = "assignment_id")
     private Assignment assignment;
 
     public Long getId() { return id; }
