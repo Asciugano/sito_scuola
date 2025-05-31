@@ -1,35 +1,29 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import { Navigate, Route, Routes} from 'react-router-dom'
+import LoginPage from './pages/loginPage'
+import SingUpPage from './pages/SingUpPage'
+import HomePage from './pages/HomePage'
+import CoursePage from './pages/CoursePage'
+import AssignmentPage from './pages/AssignmentPage'
+import ProfilePage from './pages/ProfilePage'
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+    const [authUser, setAuthUser] = useState({ id: 1 })
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    return (
+        <>
+            <h1 className='font-bold text-2xl text-red-500'>HOME</h1>
+            <Routes>
+                <Route path='/' element={authUser !== null ? <HomePage /> : <Navigate to="/login" />} />
+                <Route path='/login' element={<LoginPage />} />
+                <Route path='/singup' element={<SingUpPage />} />
+                <Route path='/courses' element={authUser !== null ? <CoursePage /> : <Navigate to="/login" />} />
+                <Route path='/assignment' element={authUser !== null ? <AssignmentPage /> : <Navigate to="/login" />} />
+                <Route path='/profile' element={authUser !== null ? <ProfilePage /> : <Navigate to="/login" />} />
+            </Routes>
+        </>
+    )
 }
 
 export default App
