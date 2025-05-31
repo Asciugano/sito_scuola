@@ -16,7 +16,7 @@ public class Submission {
     private LocalDateTime submittedAt;
 
     @ManyToOne
-    @JoinColumn(name = "assignmets_id")
+    @JoinColumn(name = "assignmet_id")
     private Assignment assignment;
 
     @ManyToOne

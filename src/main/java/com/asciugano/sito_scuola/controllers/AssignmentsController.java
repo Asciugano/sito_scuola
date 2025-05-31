@@ -30,9 +30,9 @@ public class AssignmentsController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping
-    public List<Assignment> getAllAssignments() {
-        return assignmentRepository.findAll();
+    @GetMapping("/course/{courseId}")
+    public List<Assignment> getAllAssignmentsByCourse(@PathVariable Long courseId) {
+        return assignmentRepository.findAssignmentByCourseId(courseId);
     }
 
     @PostMapping

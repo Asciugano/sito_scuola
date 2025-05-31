@@ -1,5 +1,6 @@
 package com.asciugano.sito_scuola.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -24,10 +25,11 @@ public class Assignment {
 
     @ManyToOne
     @JoinColumn(name = "course_id")
+    @JsonIgnoreProperties({"assignments"})
     private Course course;
 
     @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL)
-    private List<Submission> submissions = new ArrayList<Submission>();
+    private List<Submission> submissions = new ArrayList<>();
 
     public Long getId() { return id; }
 
